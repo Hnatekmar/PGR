@@ -1,8 +1,10 @@
 #version 330 core
 
-in vec4 vertexColor;
+uniform sampler2D diffuse;
+in vec2 texturePosition;
+in vec3 vertexNormal;
 out vec4 fragColor;
 
 void main() {
-    fragColor = vertexColor;
+    fragColor = texture(diffuse, texturePosition);
 }

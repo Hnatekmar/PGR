@@ -1,11 +1,14 @@
 #version 330 core
 
-in vec4 position;
-in vec4 solidColor;
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 uv;
 uniform mat4 transform;
-out vec4 vertexColor;
+out vec2 texturePosition;
+out vec3 vertexNormal;
 
 void main() {
-    gl_Position = transform * position;
-    vertexColor = solidColor;
+    gl_Position = transform * vec4(position, 1.0f);
+    texturePosition = uv;
+    vertexNormal = normal;
 }
