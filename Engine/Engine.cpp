@@ -5,7 +5,7 @@
 #include "Primitives/Model.h"
 #include <glm/gtx/transform.hpp>
 #include <il.h>
-
+#include "GraphicsComponent.h"
 Engine::Engine(const char* name) {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         // ERROR HANDLING
@@ -45,7 +45,7 @@ void Engine::update() {
     HANDLE_GL_ERRORS()
     glUseProgram(shaderProgram);
     SDL_Event event{};
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -5.0),
+    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -10.0),
                            glm::vec3(0.0f, 0.0f, 0.0f),
                            glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -55,7 +55,6 @@ void Engine::update() {
             0.1f,              // Near clipping plane. Keep as big as possible, or you'll get precision issues.
             10000.0f             // Far clipping plane. Keep as little as possible.
     );
-    glm::mat4 model = glm::mat4();
     bool run = true;
     auto previousFrameTimestamp = SDL_GetTicks();
     glEnable(GL_DEPTH_TEST);
@@ -68,11 +67,12 @@ void Engine::update() {
         glClearColor(0.5, 0.5, 0.5, 1.0);
         auto current = SDL_GetTicks();
         auto delta = current - previousFrameTimestamp;
-        rotationAngle += 10.0f * (delta / 1000.0);
-        if(rotationAngle > 360) rotationAngle = 0;
-        model = glm::rotate(glm::radians(rotationAngle), glm::vec3(1.0f, 0.0f, 0.0f));
         previousFrameTimestamp = current;
-        //m_entityManager.update(delta)
+        m_entityManager.entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent& component) {
+            glm::mat4 model = glm::translate(glm::mat4(), component.position);
+            model = glm::rotate(model, component.angle, component.angleVec);
+            component.drawable->draw(projection * view * model, shaderProgram);
+        });
         SDL_GL_SwapWindow(m_window);
         HANDLE_GL_ERRORS()
     }
@@ -84,7 +84,7 @@ Engine::~Engine() {
     SDL_Quit();
 }
 
-EntityManager &Engine::getEntityManager() {
+entityx::EntityX &Engine::getEntityManager() {
     return m_entityManager;
 }
 
