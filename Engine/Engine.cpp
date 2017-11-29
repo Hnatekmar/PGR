@@ -6,6 +6,8 @@
 #include <glm/gtx/transform.hpp>
 #include <il.h>
 #include "GraphicsComponent.h"
+#include "SDLEvent.h"
+
 Engine::Engine(const char* name) {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         // ERROR HANDLING
@@ -62,6 +64,9 @@ void Engine::update() {
     while(run) {
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) run = false;
+            else {
+                m_entityManager.events.emit<SDLEvent>(event);
+            }
         }
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.5, 0.5, 0.5, 1.0);

@@ -27,7 +27,7 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/default.frag
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/default.vert
         DESTINATION ${CMAKE_BINARY_DIR})
 
-set(SOURCE_FILES Engine.cpp Engine.h IDrawable.h Shader.cpp Shader.h Buffer.h Exceptions/EngineException.cpp Exceptions/EngineException.h Primitives/Vertex.h Primitives/Texture.h Primitives/Mesh.h Primitives/Mesh.cpp Primitives/Texture.cpp Primitives/Model.cpp Primitives/Model.h GraphicsComponent.h)
+set(SOURCE_FILES Engine.cpp Engine.h IDrawable.h Shader.cpp Shader.h Buffer.h Exceptions/EngineException.cpp Exceptions/EngineException.h Primitives/Vertex.h Primitives/Texture.h Primitives/Mesh.h Primitives/Mesh.cpp Primitives/Texture.cpp Primitives/Model.cpp Primitives/Model.h GraphicsComponent.h SDLEvent.h)
 add_library(Engine ${SOURCE_FILES})
 target_link_libraries(Engine
         ${GLEW_LIBRARIES}
