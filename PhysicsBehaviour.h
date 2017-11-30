@@ -11,8 +11,9 @@
 #include <btBulletCollisionCommon.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include "RigidBodyComponent.h"
 
-class PhysicsBehaviour: public entityx::System<PhysicsBehaviour> {
+class PhysicsBehaviour: public entityx::System<PhysicsBehaviour>, public entityx::Receiver<PhysicsBehaviour> {
     // TODO: Tohle by asi chtělo zabalit do nějákého konfiguračního objektu
     std::unique_ptr<btBroadphaseInterface> m_broadphase;
     std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
@@ -24,6 +25,8 @@ public:
     void update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) override;
 
     void configure(entityx::EntityManager &entities, entityx::EventManager &events) override;
+
+    void receive(const entityx::ComponentAddedEvent<RigidBody>& event);
 };
 
 
