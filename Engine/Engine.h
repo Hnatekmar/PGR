@@ -8,11 +8,10 @@
 /*!
  * \brief Třída starající se o běh enginu.
  */
-class Engine {
+class Engine: public entityx::EntityX {
 
     SDL_Window* m_window;
     SDL_GLContext m_context;
-    entityx::EntityX m_entityManager;
 public:
     explicit Engine(const char* name);
     ~Engine();

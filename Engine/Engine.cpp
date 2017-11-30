@@ -18,7 +18,6 @@ Engine::Engine(const char* name) {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         m_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                     800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
@@ -35,6 +34,8 @@ Engine::Engine(const char* name) {
     }
 }
 
+#include "Camera.h"
+
 void Engine::update() {
     auto shaderProgram = glCreateProgram();
     auto vertex = compileShader(GL_VERTEX_SHADER, "default.vert");
@@ -47,25 +48,14 @@ void Engine::update() {
     HANDLE_GL_ERRORS()
     glUseProgram(shaderProgram);
     SDL_Event event{};
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -10.0),
-                           glm::vec3(0.0f, 0.0f, 0.0f),
-                           glm::vec3(1.0f, 0.0f, 0.0f));
-
-    glm::mat4 projection = glm::perspective(
-            glm::radians(45.0f), // The vertical Field of View, in radians: the amount of "zoom". Think "camera lens". Usually between 90° (extra wide) and 30° (quite zoomed in)
-            4.0f / 3.0f,       // Aspect Ratio. Depends on the size of your window. Notice that 4/3 == 800/600 == 1280/960, sounds familiar ?
-            0.1f,              // Near clipping plane. Keep as big as possible, or you'll get precision issues.
-            10000.0f             // Far clipping plane. Keep as little as possible.
-    );
     bool run = true;
     auto previousFrameTimestamp = SDL_GetTicks();
     glEnable(GL_DEPTH_TEST);
-    float rotationAngle = 0.0f;
     while(run) {
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) run = false;
             else {
-                m_entityManager.events.emit<SDLEvent>(event);
+                events.emit<SDLEvent>(event);
             }
         }
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -73,11 +63,14 @@ void Engine::update() {
         auto current = SDL_GetTicks();
         auto delta = current - previousFrameTimestamp;
         previousFrameTimestamp = current;
-        m_entityManager.entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent& component) {
-            glm::mat4 model = glm::translate(glm::mat4(), component.position);
-            model = glm::rotate(model, component.angle, component.angleVec);
-            component.drawable->draw(projection * view * model, shaderProgram);
-        });
+        systems.update_all(delta / 1000.0);
+        entities.each<CameraComponent>([&](entityx::Entity entity, CameraComponent& cameraComponent) {
+                                                           entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent &component) {
+                                                               glm::mat4 model = glm::translate(glm::mat4(), component.position);
+                                                               model = glm::rotate(model, component.angle, component.angleVec);
+                                                               component.drawable->draw(cameraComponent.getPVMatrix() * model, shaderProgram);
+                                                           });
+                                                       });
         SDL_GL_SwapWindow(m_window);
         HANDLE_GL_ERRORS()
     }
