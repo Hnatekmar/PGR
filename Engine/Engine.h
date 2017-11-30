@@ -16,7 +16,6 @@ public:
     explicit Engine(const char* name);
     ~Engine();
     void update();
-    entityx::EntityX& getEntityManager();
 };
 
 

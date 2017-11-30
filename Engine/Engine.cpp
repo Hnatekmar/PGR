@@ -82,7 +82,4 @@ Engine::~Engine() {
     SDL_Quit();
 }
 
-entityx::EntityX &Engine::getEntityManager() {
-    return m_entityManager;
-}
 
