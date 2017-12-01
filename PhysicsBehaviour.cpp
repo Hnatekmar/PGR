@@ -20,7 +20,7 @@ void PhysicsBehaviour::update(entityx::EntityManager &entities, entityx::EventMa
         graphics.angleVec = glm::axis(quaternion);
         graphics.angle = glm::angle(quaternion);
     });
-    m_world->stepSimulation(dt, 10);
+    m_world->stepSimulation(dt, 20);
 }
 
 void PhysicsBehaviour::configure(entityx::EntityManager &entities, entityx::EventManager &events) {
