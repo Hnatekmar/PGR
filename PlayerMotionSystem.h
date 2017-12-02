@@ -8,14 +8,14 @@
 
 #include <entityx/Event.h>
 #include <entityx/System.h>
+#include <glm/vec2.hpp>
 #include "Engine/SDLEvent.h"
 
 class PlayerMotionSystem: public entityx::System<PlayerMotionSystem>,
                           public entityx::Receiver<PlayerMotionSystem> {
     bool m_forwardPressed;
     bool m_backwardPressed;
-    float m_yaw;
-    float m_pitch;
+    glm::vec2 m_lastMousePos;
 public:
 
     void update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) override;

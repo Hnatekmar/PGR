@@ -10,15 +10,15 @@
 
 void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
     int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
-    float normalizedX = (0.5f - mouseX / 800.0f);
-    float normalizedY = (0.5f - mouseY / 600.0f);
+    SDL_GetGlobalMouseState(&mouseX, &mouseY);
+    auto mouseDelta = glm::vec2(mouseX, mouseY) - m_lastMousePos;
+    m_lastMousePos = glm::vec2(mouseX, mouseY);
     entities.each<PlayerState, RigidBody, CameraComponent>([&](entityx::Entity entity,
                                                                PlayerState& state,
                                                                RigidBody& body,
                                                                CameraComponent& fpsCamera) {
-        state.pitch -= 50 * normalizedY * dt;
-        state.yaw += 50 * normalizedX * dt;
+        state.pitch += 5 * mouseDelta.y * dt;
+        state.yaw += 5 * mouseDelta.x * dt;
         btTransform trans;
         body.rigidBody->getMotionState()->getWorldTransform(trans);
         fpsCamera.setPosition(glm::vec3(
