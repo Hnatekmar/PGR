@@ -18,9 +18,13 @@ Engine::Engine(const char* name) {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
+        SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+
+
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         m_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                    800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+                                    1024, 800, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP);
         if(m_window == nullptr) {
             SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "Couldn't initialize window");
         }
@@ -59,7 +63,7 @@ void Engine::update() {
             }
         }
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.5, 0.5, 0.5, 1.0);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
         auto current = SDL_GetTicks();
         auto delta = current - previousFrameTimestamp;
         previousFrameTimestamp = current;
@@ -71,6 +75,7 @@ void Engine::update() {
                                                                component.drawable->draw(cameraComponent.getPVMatrix() * model, shaderProgram);
                                                            });
                                                        });
+        SDL_WarpMouseInWindow(m_window, 1024 / 2, 800 / 2);
         SDL_GL_SwapWindow(m_window);
         HANDLE_GL_ERRORS()
     }

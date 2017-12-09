@@ -7,18 +7,29 @@
 #include "RigidBodyComponent.h"
 #include "PlayerState.h"
 #include <glm/gtx/rotate_vector.hpp>
+#include <iostream>
 
 void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
-    int mouseX, mouseY;
-    SDL_GetGlobalMouseState(&mouseX, &mouseY);
-    auto mouseDelta = glm::vec2(mouseX, mouseY) - m_lastMousePos;
-    m_lastMousePos = glm::vec2(mouseX, mouseY);
+    std::cout << m_mouseDelta.x << ' ' << m_mouseDelta.y << std::endl;
     entities.each<PlayerState, RigidBody, CameraComponent>([&](entityx::Entity entity,
                                                                PlayerState& state,
                                                                RigidBody& body,
                                                                CameraComponent& fpsCamera) {
-        state.pitch += 5 * mouseDelta.y * dt;
-        state.yaw += 5 * mouseDelta.x * dt;
+        state.pitch += 5.0 * m_mouseDelta.y * dt;
+        state.yaw -= 5.0 * m_mouseDelta.x * dt;
+        if(state.pitch > 90) {
+            state.pitch = 90;
+        } else if(state.pitch < -90) {
+            state.pitch = -90;
+        }
+        if(abs(state.yaw) > 360) {
+            if(state.yaw > 0) {
+                state.yaw -= 360;
+            } else {
+                state.yaw += 360;
+            }
+        }
+        std::cout << state.pitch << ' ' << state.yaw << std::endl;
         btTransform trans;
         body.rigidBody->getMotionState()->getWorldTransform(trans);
         fpsCamera.setPosition(glm::vec3(
@@ -29,6 +40,7 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
         auto dirVector = glm::rotateX(glm::rotateY(glm::vec3(0, 0, 100),
                                                    glm::radians(state.yaw)),
                                       glm::radians(state.pitch));
+        dirVector /= dirVector.length();
         fpsCamera.setDirection(fpsCamera.getPosition() + dirVector);
         if(!m_forwardPressed && !m_backwardPressed) body.rigidBody->clearForces();
         if(m_forwardPressed) {
@@ -57,6 +69,12 @@ void PlayerMotionSystem::receive(const SDLEvent &event) {
         if(event.event.key.keysym.sym == SDLK_DOWN) {
             m_backwardPressed = false;
         }
+    }
+    if(event.event.type == SDL_MOUSEMOTION) {
+        m_mouseDelta.x = event.event.motion.xrel;
+        if(abs(event.event.motion.xrel) <= 2) m_mouseDelta.x = 0;
+        m_mouseDelta.y = event.event.motion.yrel;
+        if(abs(event.event.motion.yrel) <= 2) m_mouseDelta.y = 0;
     }
 }
 
