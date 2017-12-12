@@ -2,13 +2,13 @@
 // Created by martin on 30.11.17.
 //
 
-#include "PhysicsBehaviour.h"
+#include "PhysicsSystem.h"
 #include "Engine/GraphicsComponent.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-void PhysicsBehaviour::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
+void PhysicsSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
     assert(m_world != nullptr);
     entities.each<RigidBody, GraphicsComponent>([](entityx::Entity entity, RigidBody& body, GraphicsComponent& graphics) {
         btTransform trans;
@@ -23,7 +23,7 @@ void PhysicsBehaviour::update(entityx::EntityManager &entities, entityx::EventMa
     m_world->stepSimulation(dt, 20);
 }
 
-void PhysicsBehaviour::configure(entityx::EntityManager &entities, entityx::EventManager &events) {
+void PhysicsSystem::configure(entityx::EntityManager &entities, entityx::EventManager &events) {
     entityx::BaseSystem::configure(entities, events);
     m_broadphase = std::make_unique<btDbvtBroadphase>();
     m_collisionConfiguration = std::make_unique<btDefaultCollisionConfiguration>();
@@ -39,6 +39,6 @@ void PhysicsBehaviour::configure(entityx::EntityManager &entities, entityx::Even
     events.subscribe<entityx::ComponentAddedEvent<RigidBody>>(*this);
 }
 
-void PhysicsBehaviour::receive(const entityx::ComponentAddedEvent<RigidBody> &event) {
+void PhysicsSystem::receive(const entityx::ComponentAddedEvent<RigidBody> &event) {
     m_world->addRigidBody(event.component->rigidBody.get());
 }

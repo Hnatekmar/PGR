@@ -13,7 +13,7 @@
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 #include "RigidBodyComponent.h"
 
-class PhysicsBehaviour: public entityx::System<PhysicsBehaviour>, public entityx::Receiver<PhysicsBehaviour> {
+class PhysicsSystem: public entityx::System<PhysicsSystem>, public entityx::Receiver<PhysicsSystem> {
     // TODO: Tohle by asi chtělo zabalit do nějákého konfiguračního objektu
     std::unique_ptr<btBroadphaseInterface> m_broadphase;
     std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
