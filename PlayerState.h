@@ -10,7 +10,7 @@
 struct PlayerState {
     float yaw;
     float pitch;
-    PlayerState(float yaw, float pitch) {
+    PlayerState(float yaw = 0.0, float pitch = 0.0) {
         this->yaw = yaw;
         this->pitch = pitch;
     }

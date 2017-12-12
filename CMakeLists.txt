@@ -9,7 +9,7 @@ FIND_PACKAGE(Bullet REQUIRED)
 file(GLOB MapSrc ${CMAKE_CURRENT_SOURCE_DIR}/Maps/*)
 
 file(COPY ${MapSrc}
-        DESTINATION ${CMAKE_BINARY_DIR}/Maps)
+        DESTINATION ${CMAKE_BINARY_DIR})
 include_directories(${BULLET_INCLUDE_DIRS})
 
 add_executable(spacer main.cpp PhysicsSystem.cpp PhysicsSystem.h RigidBodyComponent.h Map.cpp Map.h MotionComponent.h PlayerMotionSystem.cpp PlayerMotionSystem.h PlayerState.h)

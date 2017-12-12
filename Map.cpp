@@ -4,10 +4,13 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
+#include <BulletCollision/CollisionShapes/btCapsuleShape.h>
 #include "Map.h"
 #include "Engine/Primitives/Model.h"
 #include "Engine/GraphicsComponent.h"
 #include "RigidBodyComponent.h"
+#include "PlayerState.h"
+#include "Engine/Camera.h"
 
 Map::Map(const std::string &modelPath, const std::string &collisionObject, entityx::EntityManager &manager) {
     m_entity = manager.create();
@@ -27,6 +30,28 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
             btVector3(0, 0, 0)
     );
 
+    // Player
+    auto player = manager.create();
+    auto playerShape = std::make_shared<btCapsuleShape>(0.7, 1.0);
+    player.assign<PlayerState>();
+    player.assign<RigidBody>(
+            btQuaternion(0.0, 0.0, 0.0, 1.0),
+            btVector3(0.0, 0.3, 0.0),
+            playerShape,
+            80,
+            btVector3(0, 0, 0)
+    );
+    player.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
+    player.component<RigidBody>().get()->rigidBody->setActivationState(1);
+    player.assign<CameraComponent>(
+            glm::vec3(0, 0, 0),
+            glm::vec3(0, 0, 1),
+            glm::vec3(0, 1, 0),
+            45.0f,
+            4.0 / 3.0,
+            0.01,
+            200.0
+    );
 }
 
 void Map::loadTriangles(const std::string &path) {

@@ -10,7 +10,6 @@
 #include <iostream>
 
 void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
-    std::cout << m_mouseDelta.x << ' ' << m_mouseDelta.y << std::endl;
     entities.each<PlayerState, RigidBody, CameraComponent>([&](entityx::Entity entity,
                                                                PlayerState& state,
                                                                RigidBody& body,
@@ -29,7 +28,6 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
                 state.yaw += 360;
             }
         }
-        std::cout << state.pitch << ' ' << state.yaw << std::endl;
         btTransform trans;
         body.rigidBody->getMotionState()->getWorldTransform(trans);
         fpsCamera.setPosition(glm::vec3(
