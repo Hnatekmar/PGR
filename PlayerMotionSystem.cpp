@@ -15,7 +15,7 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
                                                                RigidBody& body,
                                                                CameraComponent& fpsCamera) {
         state.pitch += 5.0 * m_mouseDelta.y * dt;
-        state.yaw -= 5.0 * m_mouseDelta.x * dt;
+        state.yaw -= 10.0 * m_mouseDelta.x * dt;
         if(state.pitch > 180) {
             state.pitch = 180;
         } else if(state.pitch < -180) {
@@ -73,9 +73,9 @@ void PlayerMotionSystem::receive(const SDLEvent &event) {
     }
     if(event.event.type == SDL_MOUSEMOTION) {
         m_mouseDelta.x = event.event.motion.xrel;
-        if(abs(event.event.motion.xrel) <= 2) m_mouseDelta.x = 0;
+        if(abs(event.event.motion.xrel) <= 5) m_mouseDelta.x = 0;
         m_mouseDelta.y = event.event.motion.yrel;
-        if(abs(event.event.motion.yrel) <= 2) m_mouseDelta.y = 0;
+        if(abs(event.event.motion.yrel) <= 5) m_mouseDelta.y = 0;
     }
 }
 
