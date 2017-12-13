@@ -38,11 +38,11 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
             btQuaternion(0.0, 0.0, 0.0, 1.0),
             btVector3(0.0, 0.3, 0.0),
             playerShape,
-            80,
+            10,
             btVector3(0, 0, 0)
     );
     player.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
-    player.component<RigidBody>().get()->rigidBody->setActivationState(1);
+    player.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
     player.assign<CameraComponent>(
             glm::vec3(0, 0, 0),
             glm::vec3(0, 0, 1),

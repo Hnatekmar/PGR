@@ -16,10 +16,10 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
                                                                CameraComponent& fpsCamera) {
         state.pitch += 5.0 * m_mouseDelta.y * dt;
         state.yaw -= 5.0 * m_mouseDelta.x * dt;
-        if(state.pitch > 90) {
-            state.pitch = 90;
-        } else if(state.pitch < -90) {
-            state.pitch = -90;
+        if(state.pitch > 180) {
+            state.pitch = 180;
+        } else if(state.pitch < -180) {
+            state.pitch = -180;
         }
         if(abs(state.yaw) > 360) {
             if(state.yaw > 0) {
@@ -43,11 +43,14 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
         if(!m_forwardPressed && !m_backwardPressed) body.rigidBody->clearForces();
         if(m_forwardPressed) {
             auto btDirVector = btVector3(dirVector.x, 0, dirVector.z).normalize();
-            body.rigidBody->applyCentralImpulse(btDirVector * 5.0f);
+            body.rigidBody->applyCentralImpulse(btDirVector * 10.5f);
         }
         if(m_backwardPressed) {
             auto btDirVector = btVector3(dirVector.x, 0, dirVector.z).normalize();
-            body.rigidBody->applyCentralImpulse(btDirVector * -5.0f);
+            body.rigidBody->applyCentralImpulse(btDirVector * -10.5f);
+        }
+        if(!m_backwardPressed && !m_forwardPressed) {
+            body.rigidBody->applyCentralImpulse(-body.rigidBody->getLinearVelocity());
         }
     });
 }
