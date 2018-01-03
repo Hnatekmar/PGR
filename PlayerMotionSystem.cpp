@@ -5,13 +5,13 @@
 #include "PlayerMotionSystem.h"
 #include "Engine/Camera.h"
 #include "RigidBodyComponent.h"
-#include "PlayerState.h"
+#include "LookingDirection.h"
 #include <glm/gtx/rotate_vector.hpp>
 #include <iostream>
 
 void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
-    entities.each<PlayerState, RigidBody, CameraComponent>([&](entityx::Entity entity,
-                                                               PlayerState& state,
+    entities.each<LookingDirection, RigidBody, CameraComponent>([&](entityx::Entity entity,
+                                                               LookingDirection& state,
                                                                RigidBody& body,
                                                                CameraComponent& fpsCamera) {
         state.pitch += 5.0 * m_mouseDelta.y * dt;

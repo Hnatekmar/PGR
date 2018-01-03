@@ -7,10 +7,10 @@
 
 #include <LinearMath/btVector3.h>
 
-struct PlayerState {
+struct LookingDirection {
     float yaw;
     float pitch;
-    PlayerState(float yaw = 0.0, float pitch = 0.0) {
+    explicit LookingDirection(float yaw = 0.0, float pitch = 0.0) {
         this->yaw = yaw;
         this->pitch = pitch;
     }
