@@ -29,7 +29,7 @@ void PhysicsSystem::configure(entityx::EntityManager &entities, entityx::EventMa
     m_collisionConfiguration = std::make_unique<btDefaultCollisionConfiguration>();
     m_collisionDispatcher = std::make_unique<btCollisionDispatcher>(m_collisionConfiguration.get());
     m_impulseSolver = std::make_unique<btSequentialImpulseConstraintSolver>();
-    m_world = std::make_unique<btDiscreteDynamicsWorld>(
+    m_world = std::make_shared<btDiscreteDynamicsWorld>(
             m_collisionDispatcher.get(),
             m_broadphase.get(),
             m_impulseSolver.get(),
@@ -41,4 +41,5 @@ void PhysicsSystem::configure(entityx::EntityManager &entities, entityx::EventMa
 
 void PhysicsSystem::receive(const entityx::ComponentAddedEvent<RigidBody> &event) {
     m_world->addRigidBody(event.component->rigidBody.get());
+    event.component->rigidBody.get()->setUserPointer(new entityx::Entity(event.entity));
 }

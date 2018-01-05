@@ -19,7 +19,7 @@ class PhysicsSystem: public entityx::System<PhysicsSystem>, public entityx::Rece
     std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
     std::unique_ptr<btCollisionDispatcher> m_collisionDispatcher;
     std::unique_ptr<btSequentialImpulseConstraintSolver> m_impulseSolver;
-    std::unique_ptr<btDiscreteDynamicsWorld> m_world;
+    std::shared_ptr<btDiscreteDynamicsWorld> m_world;
 
 public:
     void update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) override;
@@ -27,6 +27,9 @@ public:
     void configure(entityx::EntityManager &entities, entityx::EventManager &events) override;
 
     void receive(const entityx::ComponentAddedEvent<RigidBody>& event);
+    std::shared_ptr<btDynamicsWorld> getWorld() const {
+        return m_world;
+    }
 };
 
 

@@ -5,6 +5,7 @@
 #include <LinearMath/btVector3.h>
 #include <assimp/scene.h>
 #include <BulletCollision/CollisionShapes/btTriangleMesh.h>
+#include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 
 class Map {
     entityx::Entity m_entity;
@@ -13,7 +14,7 @@ class Map {
 
     void processNode(aiNode* node, const aiScene* scene);
 public:
-    Map(const std::string& modelPath, const std::string& collisionObject, entityx::EntityManager& manager);
+    Map(const std::string& modelPath, const std::string& collisionObject, entityx::EntityManager& manager, std::shared_ptr<btDynamicsWorld> world);
 
 };
 

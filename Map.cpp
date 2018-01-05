@@ -11,8 +11,11 @@
 #include "RigidBodyComponent.h"
 #include "LookingDirection.h"
 #include "Engine/Camera.h"
+#include "WeaponInfo.h"
+#include <chrono>
 
-Map::Map(const std::string &modelPath, const std::string &collisionObject, entityx::EntityManager &manager) {
+using namespace std::chrono_literals;
+Map::Map(const std::string &modelPath, const std::string &collisionObject, entityx::EntityManager &manager, std::shared_ptr<btDynamicsWorld> world) {
     m_entity = manager.create();
     std::shared_ptr<IDrawable> mapModel = std::make_shared<Model>(modelPath);
     m_entity.assign<GraphicsComponent>(glm::vec3(),
@@ -51,6 +54,13 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
             4.0 / 3.0,
             0.01,
             200.0
+    );
+    player.assign<WeaponInfo>(
+            (unsigned)100,
+            (unsigned)10,
+            1500.0ms,
+            (unsigned)500,
+            world
     );
 }
 

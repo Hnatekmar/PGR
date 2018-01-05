@@ -12,6 +12,6 @@ file(COPY ${MapSrc}
         DESTINATION ${CMAKE_BINARY_DIR})
 include_directories(${BULLET_INCLUDE_DIRS})
 
-add_executable(spacer main.cpp WeaponInfo.h PhysicsSystem.cpp PhysicsSystem.h RigidBodyComponent.h Map.cpp Map.h MotionComponent.h PlayerMotionSystem.cpp PlayerMotionSystem.h LookingDirection.h ShootingSystem.cpp ShootingSystem.h)
+add_executable(spacer main.cpp WeaponInfo.h PhysicsSystem.cpp PhysicsSystem.h RigidBodyComponent.h Map.cpp Map.h MotionComponent.h PlayerMotionSystem.cpp PlayerMotionSystem.h LookingDirection.h ShootingSystem.cpp ShootingSystem.h Timer.cpp Timer.h Util.h)
 
 target_link_libraries(spacer Engine ${BULLET_LIBRARIES})
