@@ -14,19 +14,11 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
                                                                LookingDirection& state,
                                                                RigidBody& body,
                                                                CameraComponent& fpsCamera) {
-        state.pitch += 5.0 * m_mouseDelta.y * dt;
-        state.yaw -= 10.0 * m_mouseDelta.x * dt;
-        if(state.pitch > 180) {
-            state.pitch = 180;
-        } else if(state.pitch < -180) {
-            state.pitch = -180;
+        if(m_leftPressed) {
+            state.yaw += 50 * dt;
         }
-        if(abs(state.yaw) > 360) {
-            if(state.yaw > 0) {
-                state.yaw -= 360;
-            } else {
-                state.yaw += 360;
-            }
+        if(m_rightPressed) {
+            state.yaw -= 50 * dt;
         }
         btTransform trans;
         body.rigidBody->getMotionState()->getWorldTransform(trans);
@@ -38,16 +30,15 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
         auto dirVector = glm::rotateX(glm::rotateY(glm::vec3(0, 0, 100),
                                                    glm::radians(state.yaw)),
                                       glm::radians(state.pitch));
-        dirVector /= dirVector.length();
         fpsCamera.setDirection(fpsCamera.getPosition() + dirVector);
         if(!m_forwardPressed && !m_backwardPressed) body.rigidBody->clearForces();
         if(m_forwardPressed) {
             auto btDirVector = btVector3(dirVector.x, 0, dirVector.z).normalize();
-            body.rigidBody->applyCentralImpulse(btDirVector * 10.5f);
+            body.rigidBody->setLinearVelocity(btDirVector * 5);
         }
         if(m_backwardPressed) {
             auto btDirVector = btVector3(dirVector.x, 0, dirVector.z).normalize();
-            body.rigidBody->applyCentralImpulse(btDirVector * -10.5f);
+            body.rigidBody->setLinearVelocity(-btDirVector * 5);
         }
         if(!m_backwardPressed && !m_forwardPressed) {
             body.rigidBody->applyCentralImpulse(-body.rigidBody->getLinearVelocity());
@@ -63,6 +54,12 @@ void PlayerMotionSystem::receive(const SDLEvent &event) {
         if(event.event.key.keysym.sym == SDLK_DOWN) {
             m_backwardPressed = true;
         }
+        if(event.event.key.keysym.sym == SDLK_LEFT) {
+            m_leftPressed = true;
+        }
+        if(event.event.key.keysym.sym == SDLK_RIGHT) {
+            m_rightPressed = true;
+        }
     } else if(event.event.type == SDL_KEYUP) {
         if(event.event.key.keysym.sym == SDLK_UP){
             m_forwardPressed = false;
@@ -70,12 +67,12 @@ void PlayerMotionSystem::receive(const SDLEvent &event) {
         if(event.event.key.keysym.sym == SDLK_DOWN) {
             m_backwardPressed = false;
         }
-    }
-    if(event.event.type == SDL_MOUSEMOTION) {
-        m_mouseDelta.x = event.event.motion.xrel;
-        if(abs(event.event.motion.xrel) <= 5) m_mouseDelta.x = 0;
-        m_mouseDelta.y = event.event.motion.yrel;
-        if(abs(event.event.motion.yrel) <= 5) m_mouseDelta.y = 0;
+        if(event.event.key.keysym.sym == SDLK_LEFT) {
+            m_leftPressed = false;
+        }
+        if(event.event.key.keysym.sym == SDLK_RIGHT) {
+            m_rightPressed = false;
+        }
     }
 }
 

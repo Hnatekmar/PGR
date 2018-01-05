@@ -9,7 +9,7 @@
 #include "Engine/Primitives/Model.h"
 #include "Engine/GraphicsComponent.h"
 #include "RigidBodyComponent.h"
-#include "PlayerState.h"
+#include "LookingDirection.h"
 #include "Engine/Camera.h"
 
 Map::Map(const std::string &modelPath, const std::string &collisionObject, entityx::EntityManager &manager) {
@@ -33,7 +33,7 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
     // Player
     auto player = manager.create();
     auto playerShape = std::make_shared<btCapsuleShape>(0.7, 1.0);
-    player.assign<PlayerState>();
+    player.assign<LookingDirection>();
     player.assign<RigidBody>(
             btQuaternion(0.0, 0.0, 0.0, 1.0),
             btVector3(0.0, 0.3, 0.0),

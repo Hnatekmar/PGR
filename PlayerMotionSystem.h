@@ -15,7 +15,8 @@ class PlayerMotionSystem: public entityx::System<PlayerMotionSystem>,
                           public entityx::Receiver<PlayerMotionSystem> {
     bool m_forwardPressed;
     bool m_backwardPressed;
-    glm::vec2 m_mouseDelta;
+    bool m_leftPressed;
+    bool m_rightPressed;
 public:
 
     void update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) override;

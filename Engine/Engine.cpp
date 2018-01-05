@@ -15,16 +15,14 @@ Engine::Engine(const char* name) {
     } else {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-        SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
         SDL_SetRelativeMouseMode(SDL_TRUE);
-
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         m_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                    1024, 800, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP);
+                                    1024, 800, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
         if(m_window == nullptr) {
             SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "Couldn't initialize window");
         }
