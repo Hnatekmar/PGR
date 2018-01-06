@@ -27,6 +27,7 @@ public:
     void configure(entityx::EntityManager &entities, entityx::EventManager &events) override;
 
     void receive(const entityx::ComponentAddedEvent<RigidBody>& event);
+    void receive(const entityx::ComponentRemovedEvent<RigidBody>& event);
     std::shared_ptr<btDynamicsWorld> getWorld() const {
         return m_world;
     }

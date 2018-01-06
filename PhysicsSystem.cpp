@@ -37,9 +37,14 @@ void PhysicsSystem::configure(entityx::EntityManager &entities, entityx::EventMa
     );
     m_world->setGravity(btVector3(0, -9.807f, 0));
     events.subscribe<entityx::ComponentAddedEvent<RigidBody>>(*this);
+    events.subscribe<entityx::ComponentRemovedEvent<RigidBody>>(*this);
 }
 
 void PhysicsSystem::receive(const entityx::ComponentAddedEvent<RigidBody> &event) {
     m_world->addRigidBody(event.component->rigidBody.get());
     event.component->rigidBody.get()->setUserPointer(new entityx::Entity(event.entity));
+}
+
+void PhysicsSystem::receive(const entityx::ComponentRemovedEvent<RigidBody> &event) {
+    m_world->removeRigidBody(event.component->rigidBody.get());
 }
