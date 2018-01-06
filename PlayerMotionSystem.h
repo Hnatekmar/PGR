@@ -17,6 +17,7 @@ class PlayerMotionSystem: public entityx::System<PlayerMotionSystem>,
     bool m_backwardPressed;
     bool m_leftPressed;
     bool m_rightPressed;
+    bool m_firePressed;
 public:
 
     void update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) override;

@@ -25,7 +25,6 @@ void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventMana
             btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
             weapon.world->rayTest(start, end, rayCallback);
             if(rayCallback.hasHit()) {
-                // TODO: Do rest
                 if(rayCallback.m_collisionObject->getUserPointer() != nullptr) {
                     auto entity = static_cast<entityx::Entity*>(rayCallback.m_collisionObject->getUserPointer());
                     std::cout << "HIT" << std::endl;
