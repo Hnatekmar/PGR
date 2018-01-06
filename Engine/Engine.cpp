@@ -18,7 +18,7 @@ Engine::Engine(const char* name) {
         //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-        SDL_SetRelativeMouseMode(SDL_TRUE);
+        //SDL_SetRelativeMouseMode(SDL_TRUE);
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         m_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

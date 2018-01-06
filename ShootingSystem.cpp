@@ -9,6 +9,7 @@
 #include "LookingDirection.h"
 #include "RigidBodyComponent.h"
 #include "Util.h"
+#include "Health.h"
 
 void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
     entities.each<WeaponInfo, LookingDirection, RigidBody>([dt](entityx::Entity entity,
@@ -27,7 +28,18 @@ void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventMana
             if(rayCallback.hasHit()) {
                 if(rayCallback.m_collisionObject->getUserPointer() != nullptr) {
                     auto entity = static_cast<entityx::Entity*>(rayCallback.m_collisionObject->getUserPointer());
-                    std::cout << "HIT" << std::endl;
+                    if(entity->valid()) {
+                        auto health = entity->component<Health>();
+                        if(health) {
+                            health.get()->hit(weapon.damage);
+                            std::cout << "HIT " << health->healthPoints << std::endl;
+                            if (health->healthPoints <= 0) {
+                                entity->destroy();
+                            }
+                        } else {
+                            std::cout << "NOHIT" << std::endl;
+                        }
+                    }
                 }
             }
         }

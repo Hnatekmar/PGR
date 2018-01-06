@@ -30,7 +30,7 @@ struct WeaponInfo {
                                                                weaponCooldown(cooldown),
                                                                sinceLastShot(),
                                                                ammo(ammo),
-                                                               world(std::move(world)) {}
+                                                               world(world) {}
 
     bool fire() {
         if (shooting && sinceLastShot.elapsed() >= weaponCooldown && ammo > 0) {

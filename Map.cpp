@@ -12,6 +12,8 @@
 #include "LookingDirection.h"
 #include "Engine/Camera.h"
 #include "WeaponInfo.h"
+#include "Health.h"
+#include "Billboard.h"
 #include <chrono>
 
 using namespace std::chrono_literals;
@@ -61,6 +63,30 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
             1500.0ms,
             (unsigned)500,
             world
+    );
+    player.assign<Health>(
+            100,
+            10
+    );
+    // Enemy
+    auto enemy = manager.create();
+    enemy.assign<Health>(100, 0);
+    auto enemyShape = std::make_shared<btCapsuleShape>(0.7, 1.0);
+    enemy.assign<RigidBody>(
+            btQuaternion(0.0, 0.0, 0.0, 1.0),
+            btVector3(0.0, 0.3, 0.0),
+            playerShape,
+            10,
+            btVector3(0, 0, 0)
+    );
+    enemy.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
+    enemy.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
+    std::shared_ptr<IDrawable> enemyGraphicsObject = std::make_shared<Billboard>("soldier.png", 0.7, 2);
+    enemy.assign<GraphicsComponent>(
+            glm::vec3(0, -5, 0),
+            0.0,
+            glm::vec3(0.0, 1.0, 0.0),
+            enemyGraphicsObject
     );
 }
 
