@@ -83,6 +83,7 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
     enemy.assign<RotationComponent>(true);
     enemy.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
     enemy.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
+    enemy.component<RigidBody>().get()->copyRotation = false;
     std::shared_ptr<IDrawable> enemyGraphicsObject = std::make_shared<Billboard>("soldier.png", 0.7, 2);
     enemy.assign<GraphicsComponent>(
             glm::vec3(0, -5, 0),

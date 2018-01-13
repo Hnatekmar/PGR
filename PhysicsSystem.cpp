@@ -17,8 +17,10 @@ void PhysicsSystem::update(entityx::EntityManager &entities, entityx::EventManag
         graphics.position.y = trans.getOrigin().y();
         graphics.position.z = trans.getOrigin().z();
         auto quaternion = glm::quat(trans.getRotation().w(), trans.getRotation().x(), trans.getRotation().y(), trans.getRotation().z());
-        graphics.angleVec = glm::axis(quaternion);
-        graphics.angle = glm::angle(quaternion);
+        if(body.copyRotation) {
+            graphics.angleVec = glm::axis(quaternion);
+            graphics.angle = glm::angle(quaternion);
+        }
     });
     m_world->stepSimulation(dt, 20);
 }

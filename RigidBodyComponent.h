@@ -14,6 +14,7 @@ struct RigidBody {
     std::shared_ptr<btCollisionShape> collisionShape;
     std::shared_ptr<btDefaultMotionState> motionState;
     std::shared_ptr<btRigidBody> rigidBody;
+    bool copyRotation = true;
     RigidBody(btQuaternion orientation, btVector3 centerOfMass, std::shared_ptr<btCollisionShape> shape, btScalar mass, btVector3 inertia) {
         assert(shape != nullptr);
         collisionShape = shape;
