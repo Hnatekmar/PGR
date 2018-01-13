@@ -73,7 +73,7 @@ void Engine::update() {
                                                                component.drawable->draw(cameraComponent.getPVMatrix() * model, shaderProgram);
                                                            });
                                                        });
-        SDL_WarpMouseInWindow(m_window, 1024 / 2, 800 / 2);
+        //SDL_WarpMouseInWindow(m_window, 1024 / 2, 800 / 2);
         SDL_GL_SwapWindow(m_window);
         HANDLE_GL_ERRORS()
     }

@@ -14,6 +14,7 @@
 #include "WeaponInfo.h"
 #include "Health.h"
 #include "Billboard.h"
+#include "RotationComponent.h"
 #include <chrono>
 
 using namespace std::chrono_literals;
@@ -79,6 +80,7 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
             10,
             btVector3(0, 0, 0)
     );
+    enemy.assign<RotationComponent>(true);
     enemy.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
     enemy.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
     std::shared_ptr<IDrawable> enemyGraphicsObject = std::make_shared<Billboard>("soldier.png", 0.7, 2);

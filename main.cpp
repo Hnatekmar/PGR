@@ -5,6 +5,7 @@
 #include "PhysicsSystem.h"
 #include "Map.h"
 #include "ShootingSystem.h"
+#include "RotationSystem.h"
 
 int main() {
     try {
@@ -12,6 +13,7 @@ int main() {
         engine.systems.add<PlayerMotionSystem>();
         engine.systems.add<PhysicsSystem>();
         engine.systems.add<ShootingSystem>();
+        engine.systems.add<RotationSystem>();
         engine.systems.configure();
         Map map("level.obj", "level.obj", engine.entities, engine.systems.system<PhysicsSystem>()->getWorld());
         engine.update();
