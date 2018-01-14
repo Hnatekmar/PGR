@@ -9,6 +9,7 @@
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include "PlayerCreator.h"
 #include "json.hpp"
+#include "EnemyCreator.h"
 
 template<typename Factory, typename ... Factories>
 entityx::Entity createEntity(entityx::EntityManager& manager, std::shared_ptr<btDynamicsWorld>& world, const nlohmann::json& data) {
@@ -22,6 +23,6 @@ entityx::Entity createEntity(entityx::EntityManager& manager, std::shared_ptr<bt
     }
 }
 
-#define CREATE_ENTITY createEntity<PlayerCreator>
+#define CREATE_ENTITY createEntity<PlayerCreator, EnemyCreator>
 
 #endif //PROJECT_ENTITYCREATOR_H

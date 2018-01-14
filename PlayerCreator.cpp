@@ -18,7 +18,6 @@ entityx::Entity PlayerCreator::create(entityx::EntityManager& manager, std::shar
     auto player = manager.create();
     auto playerShape = std::make_shared<btCapsuleShape>(0.7, 1.0);
     player.assign<LookingDirection>();
-    std::cout << data.dump() << std::endl;
 
     auto x = data.at("x").get<float>();
     auto y = data.at("y").get<float>();

@@ -48,29 +48,6 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, const
     for(auto& entityData: entities) {
         CREATE_ENTITY(manager, world, entityData);
     }
-
-    // Enemy
-    auto enemy = manager.create();
-    enemy.assign<Health>(100, 0);
-    auto enemyShape = std::make_shared<btCapsuleShape>(0.7, 1.0);
-    enemy.assign<RigidBody>(
-            btQuaternion(0.0, 0.0, 0.0, 1.0),
-            btVector3(0.0, 0.3, 0.0),
-            enemyShape,
-            10,
-            btVector3(0, 0, 0)
-    );
-    enemy.assign<RotationComponent>(true);
-    enemy.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
-    enemy.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
-    enemy.component<RigidBody>().get()->copyRotation = false;
-    std::shared_ptr<IDrawable> enemyGraphicsObject = std::make_shared<Billboard>("soldier.png", 0.7, 2);
-    enemy.assign<GraphicsComponent>(
-            glm::vec3(0, -5, 0),
-            0.0,
-            glm::vec3(0.0, 1.0, 0.0),
-            enemyGraphicsObject
-    );
 }
 
 void Map::loadTriangles(const std::string &path) {
