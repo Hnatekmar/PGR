@@ -15,7 +15,7 @@ int main() {
         engine.systems.add<ShootingSystem>();
         engine.systems.add<RotationSystem>();
         engine.systems.configure();
-        Map map("level.obj", "level.obj", engine.entities, engine.systems.system<PhysicsSystem>()->getWorld());
+        Map map("level.obj", "level.obj", "map.json", engine.entities, engine.systems.system<PhysicsSystem>()->getWorld());
         engine.update();
     } catch (EngineException& ex) {
         std::cerr << ex.error() << std::endl;

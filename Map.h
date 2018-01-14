@@ -13,8 +13,9 @@ class Map {
     void loadTriangles(const std::string& path);
 
     void processNode(aiNode* node, const aiScene* scene);
+    void loadFromJson(const std::string& path);
 public:
-    Map(const std::string& modelPath, const std::string& collisionObject, entityx::EntityManager& manager, std::shared_ptr<btDynamicsWorld> world);
+    Map(const std::string& modelPath, const std::string& collisionObject, const std::string& infoPath, entityx::EntityManager& manager, std::shared_ptr<btDynamicsWorld> world);
 
 };
 

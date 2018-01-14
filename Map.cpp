@@ -15,10 +15,17 @@
 #include "Health.h"
 #include "Billboard.h"
 #include "RotationComponent.h"
-#include <chrono>
+#include <fstream>
+#include "json.hpp"
+#include "EntityCreator.h"
 
 using namespace std::chrono_literals;
-Map::Map(const std::string &modelPath, const std::string &collisionObject, entityx::EntityManager &manager, std::shared_ptr<btDynamicsWorld> world) {
+Map::Map(const std::string &modelPath, const std::string &collisionObject, const std::string& infoPath, entityx::EntityManager &manager, std::shared_ptr<btDynamicsWorld> world) {
+    std::ifstream inFile;
+    inFile.open(infoPath);
+    std::stringstream content;
+    content << inFile.rdbuf();
+
     m_entity = manager.create();
     std::shared_ptr<IDrawable> mapModel = std::make_shared<Model>(modelPath);
     m_entity.assign<GraphicsComponent>(glm::vec3(),
@@ -36,39 +43,12 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
             btVector3(0, 0, 0)
     );
 
-    // Player
-    auto player = manager.create();
-    auto playerShape = std::make_shared<btCapsuleShape>(0.7, 1.0);
-    player.assign<LookingDirection>();
-    player.assign<RigidBody>(
-            btQuaternion(0.0, 0.0, 0.0, 1.0),
-            btVector3(0.0, 0.3, 0.0),
-            playerShape,
-            10,
-            btVector3(0, 0, 0)
-    );
-    player.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
-    player.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
-    player.assign<CameraComponent>(
-            glm::vec3(0, 0, 0),
-            glm::vec3(0, 0, 1),
-            glm::vec3(0, 1, 0),
-            45.0f,
-            4.0 / 3.0,
-            0.01,
-            200.0
-    );
-    player.assign<WeaponInfo>(
-            (unsigned)100,
-            (unsigned)10,
-            1500.0ms,
-            (unsigned)500,
-            world
-    );
-    player.assign<Health>(
-            100,
-            10
-    );
+    auto jsonData = nlohmann::json::parse(content.str());
+    auto entities = jsonData["entities"].get<std::list<nlohmann::json>>();
+    for(auto& entityData: entities) {
+        CREATE_ENTITY(manager, world, entityData);
+    }
+
     // Enemy
     auto enemy = manager.create();
     enemy.assign<Health>(100, 0);
@@ -76,7 +56,7 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, entit
     enemy.assign<RigidBody>(
             btQuaternion(0.0, 0.0, 0.0, 1.0),
             btVector3(0.0, 0.3, 0.0),
-            playerShape,
+            enemyShape,
             10,
             btVector3(0, 0, 0)
     );
@@ -121,4 +101,8 @@ void Map::processNode(aiNode *node, const aiScene *scene) {
     for(unsigned i = 0; i < node->mNumChildren; i++) {
         processNode(node->mChildren[i], scene);
     }
+}
+
+void Map::loadFromJson(const std::string &path) {
+
 }
