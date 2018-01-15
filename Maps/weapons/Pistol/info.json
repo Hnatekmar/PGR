@@ -1,5 +1,6 @@
 {
   "name": "Pistol",
+  "ammo": 50,
   "clipSize": 10,
   "damage": 10,
   "idle": ["1.png"],

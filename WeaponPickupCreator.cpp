@@ -56,6 +56,7 @@ entityx::Entity WeaponPickupCreator::create(entityx::EntityManager &manager, std
                         auto weaponInfo = player.component<WeaponInfo>().get();
                         weaponInfo->damage = weaponJson.at("damage").get<unsigned int>();
                         weaponInfo->damage = weaponJson.at("clipSize").get<unsigned int>();
+                        weaponInfo->ammo = weaponJson.at("ammo").get<unsigned int>();
                         pickupEntity.destroy();
                     }
     );
