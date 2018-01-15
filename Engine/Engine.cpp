@@ -37,6 +37,8 @@ Engine::Engine(const char* name) {
 }
 
 #include "Camera.h"
+#include "../GuiComponent.h"
+#include "../Health.h"
 
 void Engine::update() {
     auto shaderProgram = glCreateProgram();
@@ -66,6 +68,12 @@ void Engine::update() {
         auto delta = current - previousFrameTimestamp;
         previousFrameTimestamp = current;
         systems.update_all(delta / 1000.0);
+        entities.each<Health, GuiComponent>([&](entityx::Entity entity, Health& health, GuiComponent &component) {
+            if(component.gun != nullptr) {
+                glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(-0.5, -0.8, 0));
+                component.gun->draw(model, shaderProgram);
+            }
+        });
         entities.each<CameraComponent>([&](entityx::Entity entity, CameraComponent& cameraComponent) {
                                                            entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent &component) {
                                                                glm::mat4 model = glm::translate(glm::mat4(), component.position);
@@ -73,7 +81,6 @@ void Engine::update() {
                                                                component.drawable->draw(cameraComponent.getPVMatrix() * model, shaderProgram);
                                                            });
                                                        });
-        //SDL_WarpMouseInWindow(m_window, 1024 / 2, 800 / 2);
         SDL_GL_SwapWindow(m_window);
         HANDLE_GL_ERRORS()
     }

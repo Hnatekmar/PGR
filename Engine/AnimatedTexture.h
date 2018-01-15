@@ -23,6 +23,9 @@ public:
     explicit AnimatedTexture(const std::vector<std::string> path, const std::chrono::duration<double, std::milli> frameDuration);
     void start();
     void stop();
+    bool playing() {
+        return m_frameCount == m_frame + 1;
+    }
     void bind(GLuint programID);
 };
 

@@ -32,10 +32,10 @@ void AnimatedTexture::bind(GLuint programID) {
     if(m_started && m_delay.elapsed() >= m_frameDuration) {
         if(m_frame + 1 < m_frameCount) {
             m_frame += 1;
+            m_delay.start();
         } else {
-            m_frame = 0;
+            start();
         }
-        m_delay.start();
     }
     m_frames.at(m_frame).bind(programID);
 }

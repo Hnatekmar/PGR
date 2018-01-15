@@ -13,8 +13,8 @@
 #include "Engine/Timer.h"
 
 struct WeaponInfo {
-    const unsigned damage;
-    const unsigned clipSize;
+    unsigned damage;
+    unsigned clipSize;
     const std::chrono::duration<double, std::milli> weaponCooldown;
     Timer sinceLastShot;
     unsigned ammo;

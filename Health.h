@@ -15,7 +15,7 @@ struct Health {
     Health(int healthPoints, int defense) : healthPoints(healthPoints), defense(defense) {}
 
     void hit(int damage) {
-        assert(damage > 0);
+        assert(damage >= 0);
         healthPoints -= std::max<int>(0, damage - defense);
     }
 };

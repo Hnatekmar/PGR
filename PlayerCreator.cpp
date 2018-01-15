@@ -9,6 +9,7 @@
 #include "Engine/Camera.h"
 #include "WeaponInfo.h"
 #include "Health.h"
+#include "GuiComponent.h"
 #include <chrono>
 
 const std::string PlayerCreator::name = "Player";
@@ -40,13 +41,16 @@ entityx::Entity PlayerCreator::create(entityx::EntityManager& manager, std::shar
             0.01,
             200.0
     );
+    player.assign<GuiComponent>();
+
     player.assign<WeaponInfo>(
-            (unsigned)100,
+            (unsigned)0,
             (unsigned)10,
             1000.0ms,
             (unsigned)500,
             world
     );
+
     player.assign<Health>(
             100,
             0

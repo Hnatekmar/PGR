@@ -10,13 +10,18 @@
 #include "RigidBodyComponent.h"
 #include "Util.h"
 #include "Health.h"
+#include "GuiComponent.h"
 
 void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
-    entities.each<WeaponInfo, LookingDirection, RigidBody>([dt](entityx::Entity entity,
-                                                                WeaponInfo& weapon,
-                                                                LookingDirection& direction,
-                                                                RigidBody& body) {
+    entities.each<WeaponInfo, LookingDirection, RigidBody, GuiComponent>([dt](entityx::Entity entity,
+                                                                              WeaponInfo& weapon,
+                                                                              LookingDirection& direction,
+                                                                              RigidBody& body,
+                                                                              GuiComponent& gui) {
         if(weapon.shooting && weapon.fire()) {
+            if(gui.gun != nullptr) {
+                gui.gun->play("shoot");
+            }
             auto start = body.rigidBody->getCenterOfMassPosition();
             auto dirVector = convert<btVector3>(glm::rotateX(glm::rotateY(glm::vec3(0, 0, 100),
                                                                           glm::radians(direction.yaw)),
@@ -32,12 +37,9 @@ void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventMana
                         auto health = entity->component<Health>();
                         if(health) {
                             health.get()->hit(weapon.damage);
-                            std::cout << "HIT " << health->healthPoints << std::endl;
                             if (health->healthPoints <= 0) {
                                 entity->destroy();
                             }
-                        } else {
-                            std::cout << "NOHIT" << std::endl;
                         }
                     }
                 }

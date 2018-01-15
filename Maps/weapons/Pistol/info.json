@@ -1,0 +1,8 @@
+{
+  "name": "Pistol",
+  "clipSize": 10,
+  "damage": 10,
+  "idle": ["1.png"],
+  "shoot": ["2.png", "3.png", "4.png"],
+  "icon": "PISSA0.png"
+}
