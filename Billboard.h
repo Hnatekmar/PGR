@@ -12,13 +12,16 @@
 #include "Engine/Primitives/Vertex.h"
 #include <string>
 #include <memory>
+#include <map>
+#include "Engine/AnimatedTexture.h"
 
 class Billboard: public IDrawable {
     GLuint m_vao;
-    Texture m_bilboardTexture;
+    std::map<std::string, AnimatedTexture> m_billboardAnimations;
     std::unique_ptr<Buffer<Vertex>> m_vbo;
+    std::string m_currentAnimation;
 public:
-    explicit Billboard(std::string imagePath, float width, float height);
+    explicit Billboard(std::map<std::string, std::vector<std::string>> imagePath, float width, float height);
     void draw(const glm::mat4 &transform, GLuint shader) override;
 };
 

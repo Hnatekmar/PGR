@@ -31,7 +31,10 @@ entityx::Entity EnemyCreator::create(entityx::EntityManager &manager, std::share
     enemy.component<RigidBody>().get()->rigidBody->setAngularFactor(btVector3(0, 0, 0));
     enemy.component<RigidBody>().get()->rigidBody->setActivationState(DISABLE_DEACTIVATION);
     enemy.component<RigidBody>().get()->copyRotation = false;
-    std::shared_ptr<IDrawable> enemyGraphicsObject = std::make_shared<Billboard>("soldier.png", 0.7, 2);
+    std::map<std::string, std::vector<std::string>> animations = {
+            {"idle", {"guard-0.png", "guard-1.png", "guard-2.png", "guard-3.png"}}
+    };
+    std::shared_ptr<IDrawable> enemyGraphicsObject = std::make_shared<Billboard>(animations, 0.7, 2);
     enemy.assign<GraphicsComponent>(
             glm::vec3(0, -5, 0),
             0.0,

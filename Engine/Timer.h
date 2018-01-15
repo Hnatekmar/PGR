@@ -17,6 +17,5 @@ public:
     void start();
     const std::chrono::duration<double, std::milli> elapsed() const;
 };
-
-
+using namespace std::chrono_literals;
 #endif //PROJECT_TIMER_H

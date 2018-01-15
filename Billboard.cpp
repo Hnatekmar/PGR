@@ -5,19 +5,27 @@
 #include "Billboard.h"
 #include "Engine/Primitives/Vertex.h"
 #include <vector>
+#include <algorithm>
 
 void Billboard::draw(const glm::mat4 &transform, GLuint shader) {
     glUniformMatrix4fv(glGetUniformLocation(shader, "transform"), 1, GL_FALSE, &transform[0][0]);
     glBindVertexArray(m_vao);
     { HANDLE_GL_ERRORS() }
-    m_bilboardTexture.bind(shader);
+    m_billboardAnimations.at("idle").bind(shader);
     { HANDLE_GL_ERRORS() }
     glDrawArrays(GL_TRIANGLES, 0, m_vbo->count());
     glBindVertexArray(0);
 }
 
-Billboard::Billboard(std::string imagePath, float width, float height): m_bilboardTexture(TextureType::diffuse, imagePath),
-                                             m_vbo(nullptr) {
+Billboard::Billboard(std::map<std::string, std::vector<std::string>> imagePath, float width, float height): m_vbo(nullptr) {
+    std::for_each(
+            imagePath.begin(),
+            imagePath.end(),
+            [&](const std::pair<std::string, std::vector<std::string>>& pair) {
+                        m_billboardAnimations.emplace(pair.first,
+                                                      std::move(AnimatedTexture(pair.second, 150ms)));
+            }
+    );
     std::vector<Vertex> vboData{
             {
                     {0, -height / 2, 0},
@@ -40,9 +48,9 @@ Billboard::Billboard(std::string imagePath, float width, float height): m_bilboa
                     {0, 0}
             },
             {
-                {width, -height / 2, 0},
-                {0, 0, 1},
-                {0, 1}
+                    {width, -height / 2, 0},
+                    {0, 0, 1},
+                    {0, 1}
             },
             {
                     {0, -height / 2, 0},
@@ -71,3 +79,4 @@ Billboard::Billboard(std::string imagePath, float width, float height): m_bilboa
     glBindVertexArray(0);
     { HANDLE_GL_ERRORS() }
 }
+
