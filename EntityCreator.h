@@ -10,7 +10,7 @@
 #include "PlayerCreator.h"
 #include "json.hpp"
 #include "EnemyCreator.h"
-#include "MedkitCreator.h"
+#include "PickupCreator.h"
 
 template<typename Factory, typename ... Factories>
 entityx::Entity createEntity(entityx::EntityManager& manager, std::shared_ptr<btDynamicsWorld>& world, const nlohmann::json& data) {
@@ -24,6 +24,6 @@ entityx::Entity createEntity(entityx::EntityManager& manager, std::shared_ptr<bt
     }
 }
 
-#define CREATE_ENTITY createEntity<PlayerCreator, EnemyCreator, MedkitCreator>
+#define CREATE_ENTITY createEntity<PlayerCreator, EnemyCreator, PickupCreator>
 
 #endif //PROJECT_ENTITYCREATOR_H

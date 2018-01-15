@@ -17,10 +17,10 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
                                                                                 CameraComponent& fpsCamera,
                                                                                 WeaponInfo& weapon) {
         if(m_leftPressed) {
-            state.yaw += 50 * dt;
+            state.yaw += 100 * dt;
         }
         if(m_rightPressed) {
-            state.yaw -= 50 * dt;
+            state.yaw -= 100 * dt;
         }
         btTransform trans;
         body.rigidBody->getMotionState()->getWorldTransform(trans);

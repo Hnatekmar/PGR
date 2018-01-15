@@ -10,7 +10,7 @@
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include "json.hpp"
 
-class MedkitCreator {
+class PickupCreator {
 public:
     static const std::string name;
     static entityx::Entity create(entityx::EntityManager& manager, std::shared_ptr<btDynamicsWorld>& world, const nlohmann::json& data);
