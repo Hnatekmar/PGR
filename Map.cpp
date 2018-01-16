@@ -18,6 +18,7 @@
 #include <fstream>
 #include "json.hpp"
 #include "EntityCreator.h"
+#include "Engine/LightComponent.h"
 
 using namespace std::chrono_literals;
 Map::Map(const std::string &modelPath, const std::string &collisionObject, const std::string& infoPath, entityx::EntityManager &manager, std::shared_ptr<btDynamicsWorld> world) {
@@ -47,6 +48,16 @@ Map::Map(const std::string &modelPath, const std::string &collisionObject, const
     auto entities = jsonData["entities"].get<std::list<nlohmann::json>>();
     for(auto& entityData: entities) {
         CREATE_ENTITY(manager, world, entityData);
+    }
+    auto lights = jsonData["lights"].get<std::list<nlohmann::json>>();
+    for(auto& light: lights) {
+        auto entity = manager.create();
+        glm::vec3 lightPosition(light["x"].get<float>(),
+                                light["y"].get<float>(),
+                                light["z"].get<float>());
+        entity.assign<LightComponent>(
+                lightPosition
+        );
     }
 }
 

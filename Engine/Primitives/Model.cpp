@@ -66,6 +66,14 @@ Mesh Model::createMesh(aiMesh* mesh, const aiScene* scene) {
                     std::string(path.C_Str())
             );
         }
+        for(unsigned int i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR); ++i) {
+            aiString path;
+            material->GetTexture(aiTextureType_SPECULAR, i, &path);
+            textures.emplace_back(
+                    TextureType::specular,
+                    std::string(path.C_Str())
+            );
+        }
     }
     Mesh result(vertices, indices, textures);
     return result;

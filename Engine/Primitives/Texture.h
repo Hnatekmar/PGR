@@ -9,7 +9,9 @@
 #include <GL/glew.h>
 
 enum class TextureType {
-    diffuse
+    diffuse,
+    specular,
+    normal
 };
 
 class Texture {

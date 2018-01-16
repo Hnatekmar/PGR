@@ -41,6 +41,7 @@ Engine::Engine(const char* name) {
 #include "../Health.h"
 #include "../GuiBar.h"
 #include "../WeaponInfo.h"
+#include "LightComponent.h"
 
 void Engine::update() {
     auto shaderProgram = glCreateProgram();
@@ -86,13 +87,34 @@ void Engine::update() {
             model = glm::translate(glm::mat4(), glm::vec3(0.49, -0.9, 0));
             ammoBar.draw(model, shaderProgram, weaponInfo.ammo % weaponInfo.clipSize, weaponInfo.clipSize);
         });
+        std::vector<glm::vec3> lights;
+        entities.each<LightComponent>([&lights](entityx::Entity entity, LightComponent& component) {
+            lights.push_back(component.position);
+        });
+        assert(lights.size() <= 8);
+        auto lightAttributePosition = glGetUniformLocation(shaderProgram, "numberOfLights");
+        assert(lightAttributePosition != -1);
+        glUniform1i(lightAttributePosition, static_cast<GLint>(lights.size()));
+        std::size_t index = 1;
+        for(auto& light: lights) {
+            std::string lightIndex = "lights[";
+            lightIndex += index + "]";
+            glUniform3fv(glGetUniformLocation(shaderProgram, lightIndex.c_str()),
+                         1,
+                         &light[0]);
+            index += 1;
+        }
         entities.each<CameraComponent>([&](entityx::Entity entity, CameraComponent& cameraComponent) {
-                                                           entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent &component) {
-                                                               glm::mat4 model = glm::translate(glm::mat4(), component.position);
-                                                               model = glm::rotate(model, component.angle, component.angleVec);
-                                                               component.drawable->draw(cameraComponent.getPVMatrix() * model, shaderProgram);
-                                                           });
-                                                       });
+            glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"),
+                         1,
+                         &cameraComponent.getPosition()[0]);
+            entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent &component) {
+                glm::mat4 model = glm::translate(glm::mat4(), component.position);
+                model = glm::rotate(model, component.angle, component.angleVec);
+                glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
+                component.drawable->draw(cameraComponent.getPVMatrix() * model, shaderProgram);
+            });
+        });
         SDL_GL_SwapWindow(m_window);
         HANDLE_GL_ERRORS()
     }

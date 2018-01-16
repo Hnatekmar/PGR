@@ -29,13 +29,23 @@ Texture::Texture(TextureType textureType, std::string path): m_type(textureType)
 }
 
 void Texture::bind(GLuint programID) {
-    glActiveTexture(GL_TEXTURE0 + static_cast<int>(m_type));
+    if(m_type == TextureType::diffuse) {
+        glActiveTexture(GL_TEXTURE0);
+    }
+    if(m_type == TextureType::specular) {
+        glActiveTexture(GL_TEXTURE1);
+    }
     { HANDLE_GL_ERRORS() }
     glBindTexture(GL_TEXTURE_2D, m_textureID);
     { HANDLE_GL_ERRORS() }
     if(m_type == TextureType::diffuse) {
         auto diffuse = glGetUniformLocation(programID, "diffuse");
         glUniform1i(diffuse, 0);
+        { HANDLE_GL_ERRORS() }
+    }
+    if(m_type == TextureType::specular) {
+        auto specular = glGetUniformLocation(programID, "specular");
+        glUniform1i(specular, 0);
         { HANDLE_GL_ERRORS() }
     }
 }
