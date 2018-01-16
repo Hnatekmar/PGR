@@ -19,12 +19,13 @@ class AnimatedTexture {
     const std::chrono::duration<double, std::milli> m_frameDuration;
     std::vector<Texture> m_frames;
     bool m_started;
+    bool m_finished;
 public:
     explicit AnimatedTexture(const std::vector<std::string> path, const std::chrono::duration<double, std::milli> frameDuration);
     void start();
     void stop();
     bool playing() {
-        return m_frameCount == m_frame + 1;
+        return !m_finished;
     }
     void bind(GLuint programID);
 };

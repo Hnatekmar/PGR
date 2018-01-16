@@ -20,23 +20,29 @@ AnimatedTexture::AnimatedTexture(const std::vector<std::string> path,
 void AnimatedTexture::stop() {
     m_frame = 0;
     m_started = false;
+    m_finished = true;
 }
 
 void AnimatedTexture::start() {
     m_frame = 0;
     m_started = true;
+    m_finished = false;
     m_delay.start();
 }
 
 void AnimatedTexture::bind(GLuint programID) {
     if(m_started && m_delay.elapsed() >= m_frameDuration) {
-        if(m_frame + 1 < m_frameCount) {
+        m_delay.start();
+        if(m_frame < m_frameCount) {
             m_frame += 1;
-            m_delay.start();
         } else {
-            start();
+            stop();
         }
     }
-    m_frames.at(m_frame).bind(programID);
+    if(m_frame < m_frameCount) {
+        m_frames.at(m_frame).bind(programID);
+    } else {
+        m_frames.at(m_frameCount - 1).bind(programID);
+    }
 }
 

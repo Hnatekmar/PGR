@@ -11,11 +11,10 @@ void Billboard::draw(const glm::mat4 &transform, GLuint shader) {
     glUniformMatrix4fv(glGetUniformLocation(shader, "transform"), 1, GL_FALSE, &transform[0][0]);
     glBindVertexArray(m_vao);
     { HANDLE_GL_ERRORS() }
-    /*
     if(!m_billboardAnimations.at(m_currentAnimation).playing()) {
         m_currentAnimation = "idle";
         m_billboardAnimations.at(m_currentAnimation).start();
-    }*/
+    }
     m_billboardAnimations.at(m_currentAnimation).bind(shader);
     { HANDLE_GL_ERRORS() }
     glDrawArrays(GL_TRIANGLES, 0, m_vbo->count());
@@ -29,7 +28,7 @@ Billboard::Billboard(std::map<std::string, std::vector<std::string>> imagePath, 
             imagePath.end(),
             [&](const std::pair<std::string, std::vector<std::string>>& pair) {
                         m_billboardAnimations.emplace(pair.first,
-                                                      std::move(AnimatedTexture(pair.second, 150ms)));
+                                                      std::move(AnimatedTexture(pair.second, 250ms)));
             }
     );
     std::vector<Vertex> vboData{
