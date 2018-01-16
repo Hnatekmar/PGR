@@ -1,7 +1,6 @@
 #include "Texture.h"
 #include <stdexcept>
 #include <il.h>
-#include <lcms.h>
 #include "../Exceptions/EngineException.h"
 
 Texture::Texture(TextureType textureType, std::string path): m_type(textureType) {

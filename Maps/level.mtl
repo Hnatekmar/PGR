@@ -1,10 +1,23 @@
-# Blender MTL File: 'testMap.blend'
-# Material Count: 1
+# Blender MTL File: 'level1.blend'
+# Material Count: 2
 
-newmtl floor
+newmtl Ceiling/Floor
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
+Kd 0.396962 0.396962 0.396962
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd ceiling.jpg
+map_Ks ceiling_specular.png
+map_Ns ceiling_specular.png
+
+newmtl Floor
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000

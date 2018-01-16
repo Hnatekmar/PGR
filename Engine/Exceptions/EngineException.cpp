@@ -5,7 +5,11 @@
 #include "EngineException.h"
 
 EngineException::EngineException(GLenum error) {
+#ifndef __APPLE__ // gluErrorString je v OS X označen za zastaralý a není podporovaný
     m_error = (char*)(gluErrorString(error));
+#else
+    m_error = "";
+#endif
 }
 
 
