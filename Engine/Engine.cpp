@@ -39,6 +39,8 @@ Engine::Engine(const char* name) {
 #include "Camera.h"
 #include "../GuiComponent.h"
 #include "../Health.h"
+#include "../GuiBar.h"
+#include "../WeaponInfo.h"
 
 void Engine::update() {
     auto shaderProgram = glCreateProgram();
@@ -51,6 +53,12 @@ void Engine::update() {
     glLinkProgram(shaderProgram);
     HANDLE_GL_ERRORS()
     glUseProgram(shaderProgram);
+    GuiBar healthBar{
+            "health_gauge.png"
+    };
+    GuiBar ammoBar{
+            "ammo_gauge.png"
+    };
     SDL_Event event{};
     bool run = true;
     auto previousFrameTimestamp = SDL_GetTicks();
@@ -68,11 +76,15 @@ void Engine::update() {
         auto delta = current - previousFrameTimestamp;
         previousFrameTimestamp = current;
         systems.update_all(delta / 1000.0);
-        entities.each<Health, GuiComponent>([&](entityx::Entity entity, Health& health, GuiComponent &component) {
+        entities.each<Health, GuiComponent, WeaponInfo>([&](entityx::Entity entity, Health& health, GuiComponent &component, WeaponInfo& weaponInfo) {
             if(component.gun != nullptr) {
-                glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(-0.5, -0.8, 0));
+                glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(0.0, -0.8, 0));
                 component.gun->draw(model, shaderProgram);
             }
+            glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(-0.99, -0.9, 0));
+            healthBar.draw(model, shaderProgram, health.healthPoints, 100.0f);
+            model = glm::translate(glm::mat4(), glm::vec3(0.49, -0.9, 0));
+            ammoBar.draw(model, shaderProgram, weaponInfo.ammo % weaponInfo.clipSize, weaponInfo.clipSize);
         });
         entities.each<CameraComponent>([&](entityx::Entity entity, CameraComponent& cameraComponent) {
                                                            entities.each<GraphicsComponent>([&](entityx::Entity entity, GraphicsComponent &component) {

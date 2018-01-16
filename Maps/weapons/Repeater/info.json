@@ -1,9 +1,9 @@
 {
-  "name": "Pistol",
-  "ammo": 1,
+  "name": "Repeater",
+  "ammo": 10,
   "clipSize": 10,
   "damage": 10,
   "idle": ["1.png"],
   "shoot": ["2.png", "3.png", "4.png"],
-  "icon": "PISSA0.png"
+  "icon": "RPTSA0.png"
 }

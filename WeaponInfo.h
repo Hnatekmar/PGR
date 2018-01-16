@@ -6,12 +6,12 @@
 #define PROJECT_WEAPONINFO_H
 
 #include <entityx/Entity.h>
-#include <btBulletDynamicsCommon.h>
 #include <memory>
 #include <SDL2/SDL_types.h>
 #include <chrono>
 #include "Engine/Timer.h"
 
+class btDynamicsWorld;
 struct WeaponInfo {
     unsigned damage;
     unsigned clipSize;

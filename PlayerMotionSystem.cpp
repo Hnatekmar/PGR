@@ -47,6 +47,7 @@ void PlayerMotionSystem::update(entityx::EntityManager &entities, entityx::Event
         }
         if(m_firePressed) {
             weapon.shooting = true;
+            m_firePressed = false;
         }
     });
 }

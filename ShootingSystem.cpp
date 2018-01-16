@@ -4,6 +4,7 @@
 
 #include <glm/vec3.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <btBulletDynamicsCommon.h>
 #include "ShootingSystem.h"
 #include "WeaponInfo.h"
 #include "LookingDirection.h"

@@ -35,32 +35,32 @@ Billboard::Billboard(std::map<std::string, std::vector<std::string>> imagePath, 
             {
                     {0, -height / 2, 0},
                     {0, 0, 1},
-                    {1, 1}
+                    {0, 1}
             },
             {
                     {0, height / 2, 0},
+                    {0, 0, 1},
+                    {0, 0}
+            },
+            {
+                    {width, height / 2, 0},
                     {0, 0, 1},
                     {1, 0}
             },
             {
                     {width, height / 2, 0},
                     {0, 0, 1},
-                    {0, 0}
-            },
-            {
-                    {width, height / 2, 0},
-                    {0, 0, 1},
-                    {0, 0}
+                    {1, 0}
             },
             {
                     {width, -height / 2, 0},
                     {0, 0, 1},
-                    {0, 1}
+                    {1, 1}
             },
             {
                     {0, -height / 2, 0},
                     {0, 0, 1},
-                    {1, 1}
+                    {0, 1}
             }
     };
     m_vbo = std::make_unique<Buffer<Vertex>>(vboData.data(), vboData.size(), GL_STATIC_DRAW);
