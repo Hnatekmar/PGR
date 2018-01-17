@@ -77,6 +77,26 @@ void Engine::update() {
         auto delta = current - previousFrameTimestamp;
         previousFrameTimestamp = current;
         systems.update_all(delta / 1000.0);
+        std::vector<glm::vec3> lights;
+        entities.each<LightComponent>([&lights](entityx::Entity entity, LightComponent& component) {
+            lights.push_back(component.position);
+        });
+        assert(lights.size() <= 8);
+        auto lightAttributePosition = glGetUniformLocation(shaderProgram, "numberOfLights");
+        assert(lightAttributePosition != -1);
+        glUniform1i(lightAttributePosition, static_cast<GLint>(lights.size()));
+        std::size_t index = 0;
+        for(auto& light: lights) {
+            std::string lightIndex = "lights[";
+            lightIndex += index + "]";
+            glUniform3fv(glGetUniformLocation(shaderProgram, lightIndex.c_str()),
+                         1,
+                         &light[0]);
+            index += 1;
+        }
+        auto shadingAttribute = glGetUniformLocation(shaderProgram, "shouldShade");
+        assert(shadingAttribute != -1);
+        glUniform1i(shadingAttribute, GL_FALSE);
         entities.each<Health, GuiComponent, WeaponInfo>([&](entityx::Entity entity, Health& health, GuiComponent &component, WeaponInfo& weaponInfo) {
             if(component.gun != nullptr) {
                 glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(0.0, -0.8, 0));
@@ -87,23 +107,7 @@ void Engine::update() {
             model = glm::translate(glm::mat4(), glm::vec3(0.49, -0.9, 0));
             ammoBar.draw(model, shaderProgram, weaponInfo.ammo % weaponInfo.clipSize, weaponInfo.clipSize);
         });
-        std::vector<glm::vec3> lights;
-        entities.each<LightComponent>([&lights](entityx::Entity entity, LightComponent& component) {
-            lights.push_back(component.position);
-        });
-        assert(lights.size() <= 8);
-        auto lightAttributePosition = glGetUniformLocation(shaderProgram, "numberOfLights");
-        assert(lightAttributePosition != -1);
-        glUniform1i(lightAttributePosition, static_cast<GLint>(lights.size()));
-        std::size_t index = 1;
-        for(auto& light: lights) {
-            std::string lightIndex = "lights[";
-            lightIndex += index + "]";
-            glUniform3fv(glGetUniformLocation(shaderProgram, lightIndex.c_str()),
-                         1,
-                         &light[0]);
-            index += 1;
-        }
+        glUniform1i(shadingAttribute, GL_TRUE);
         entities.each<CameraComponent>([&](entityx::Entity entity, CameraComponent& cameraComponent) {
             glUniform3fv(glGetUniformLocation(shaderProgram, "viewPos"),
                          1,
