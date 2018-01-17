@@ -7,8 +7,10 @@
 struct AIComponent {
     unsigned maximumDistance;
     bool dieAnimationTriggered;
+    bool shotAtPlayer;
     AIComponent(unsigned maximumDistance): maximumDistance(maximumDistance) {
         dieAnimationTriggered = false;
+        shotAtPlayer = false;
     }
 };
 #endif //PROJECT_AICOMPONENT_H

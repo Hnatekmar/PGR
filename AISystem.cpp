@@ -31,28 +31,35 @@ void AISystem::update(entityx::EntityManager &entities, entityx::EventManager &e
                     }
                 }
                 auto start = body.rigidBody->getCenterOfMassPosition();
-                auto dirVector = convert<btVector3>(glm::rotateY(glm::vec3(0, 0, 100), glm::radians(graphicsComponent.angle)));
-                start = dirVector * 0.1;
+                auto dirVector = convert<btVector3>(glm::rotateY(glm::vec3(0, 0, -100), glm::radians(graphicsComponent.angle)));
+                entities.each<RigidBody, CameraComponent>(
+                        [&](entityx::Entity aEntity, RigidBody& body, CameraComponent& cam) {
+                            dirVector = body.rigidBody->getCenterOfMassPosition() - start;
+                        }
+                );
                 auto end = start + dirVector;
                 graphicsComponent.angleVec;
                 btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
                 weapon.world->rayTest(start, end, rayCallback);
-                if(rayCallback.hasHit() && animation->getCurrentAnimation() == "idle") {
+                if(rayCallback.hasHit()) {
                     if(rayCallback.m_collisionObject->getUserPointer() != nullptr) {
                         auto entity = static_cast<entityx::Entity *>(rayCallback.m_collisionObject->getUserPointer());
                         if(entity->component<CameraComponent>()) {
-                            weapon.shooting = true;
-                            animation->play("shoot");
-                            direction.yaw = graphicsComponent.angle;
-                            body.rigidBody->setLinearVelocity(btVector3(0.0, 0.0, 0.0));
-                        } else {
-                            animation->play("walk");
-                            body.rigidBody->setLinearVelocity(dirVector * 0.05);
+                            if(animation->getCurrentAnimation() == "idle") {
+                                if(!ai.shotAtPlayer) {
+                                    animation->play("shoot");
+                                    ai.shotAtPlayer = true;
+                                    entity->component<Health>()->hit(weapon.damage);
+                                } else {
+                                    direction.yaw = graphicsComponent.angle;
+                                    body.rigidBody->setLinearVelocity(btVector3(0.0, 0.0, 0.0));
+                                    animation->play("walk");
+                                    body.rigidBody->setLinearVelocity(dirVector * 0.1);
+                                    ai.shotAtPlayer = false;
+                                }
+                            }
                         }
                     }
-                }
-                if(animation->getCurrentAnimation() == "idle") {
-                    animation->play("walk");
                 }
             }
     );

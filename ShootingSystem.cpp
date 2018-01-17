@@ -14,14 +14,16 @@
 #include "GuiComponent.h"
 
 void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventManager &events, entityx::TimeDelta dt) {
-    entities.each<WeaponInfo, LookingDirection, RigidBody, GuiComponent>([dt](entityx::Entity entity,
+    entities.each<WeaponInfo, LookingDirection, RigidBody>([dt](entityx::Entity entity,
                                                                               WeaponInfo& weapon,
                                                                               LookingDirection& direction,
-                                                                              RigidBody& body,
-                                                                              GuiComponent& gui) {
+                                                                              RigidBody& body) {
         if(weapon.shooting && weapon.fire()) {
-            if(gui.gun != nullptr) {
-                gui.gun->play("shoot");
+            if(entity.component<GuiComponent>()) {
+                auto gui = entity.component<GuiComponent>();
+                if(gui->gun != nullptr) {
+                    gui->gun->play("shoot");
+                }
             }
             auto start = body.rigidBody->getCenterOfMassPosition();
             auto dirVector = convert<btVector3>(glm::rotateX(glm::rotateY(glm::vec3(0, 0, 100),
