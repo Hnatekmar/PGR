@@ -7,6 +7,7 @@
 #include "ShootingSystem.h"
 #include "RotationSystem.h"
 #include "ProximitySystem.h"
+#include "AISystem.h"
 
 int main() {
     try {
@@ -16,6 +17,7 @@ int main() {
         engine.systems.add<ShootingSystem>();
         engine.systems.add<RotationSystem>();
         engine.systems.add<ProximitySystem>();
+        engine.systems.add<AISystem>();
         engine.systems.configure();
         Map map("level.obj", "level.obj", "map.json", engine.entities, engine.systems.system<PhysicsSystem>()->getWorld());
         engine.update();

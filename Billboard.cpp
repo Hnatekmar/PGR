@@ -85,3 +85,7 @@ Billboard::Billboard(std::map<std::string, std::vector<std::string>> imagePath, 
     { HANDLE_GL_ERRORS() }
 }
 
+const std::string &Billboard::getCurrentAnimation() const {
+    return m_currentAnimation;
+}
+

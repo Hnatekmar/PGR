@@ -21,6 +21,9 @@ class Billboard: public IDrawable {
     std::unique_ptr<Buffer<Vertex>> m_vbo;
     std::string m_currentAnimation;
 public:
+    const std::string &getCurrentAnimation() const;
+
+public:
     explicit Billboard(std::map<std::string, std::vector<std::string>> imagePath, float width, float height);
     void draw(const glm::mat4 &transform, GLuint shader) override;
     void play(const std::string current) {

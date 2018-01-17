@@ -38,9 +38,6 @@ void ShootingSystem::update(entityx::EntityManager &entities, entityx::EventMana
                         auto health = entity->component<Health>();
                         if(health) {
                             health.get()->hit(weapon.damage);
-                            if (health->healthPoints <= 0) {
-                                entity->destroy();
-                            }
                         }
                     }
                 }
