@@ -19,7 +19,7 @@ int main() {
         engine.systems.add<ProximitySystem>();
         engine.systems.add<AISystem>();
         engine.systems.configure();
-        Map map("level.obj", "level.obj", "map.json", engine.entities, engine.systems.system<PhysicsSystem>()->getWorld());
+        engine.systems.add<Map>("level.obj", "level.obj", "map.json", engine.entities, engine.systems.system<PhysicsSystem>()->getWorld());
         engine.update();
     } catch (EngineException& ex) {
         std::cerr << ex.error() << std::endl;
