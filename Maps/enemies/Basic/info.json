@@ -1,0 +1,8 @@
+{
+  "idle": ["g0.png"],
+  "walk": ["g0.png", "g16.png", "g24.png", "g32.png"],
+  "shoot": ["g47.png", "g48.png", "g49.png", "g50.png"],
+  "die": ["g41.png", "g42.png", "g43.png", "g44.png"],
+  "damage": 5,
+  "fireDelay": 150
+}
